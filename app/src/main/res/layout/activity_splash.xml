@@ -14,26 +14,24 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_splash_sun"
+            android:id="@+id/tv_splash_cloud"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/tv_sun"
+            android:text="@string/tv_cloud"
             android:textColor="@color/white"
-            android:textSize="350sp"/>
+            android:textSize="300sp"/>
 
         <TextView
             android:id="@+id/tv_splash_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="100dp"
-            android:text="@string/tv_at_last_forecast"
-            android:lines="2"
+            android:text="@string/tv_the_fast_forecast"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/white"/>
+            android:fontFamily="sans-serif-heavy"
+            android:textColor="@color/blue_text"/>
 
     </RelativeLayout>
 

@@ -15,7 +15,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private RelativeLayout rl_splash_logo;
 
-    private TextView tv_splash_sun;
+    private TextView tv_splash_cloud;
     private TextView tv_splash_app_name;
 
     private Typeface fontAwesome;
@@ -27,10 +27,10 @@ public class SplashActivity extends AppCompatActivity {
 
         fontAwesome = FontCache.get("fontawesome-webfont.ttf", this);
 
-        tv_splash_sun = (TextView)findViewById(R.id.tv_splash_sun);
-        tv_splash_sun.setTypeface(fontAwesome);
+        tv_splash_cloud = (TextView)findViewById(R.id.tv_splash_cloud);
+        tv_splash_cloud.setTypeface(fontAwesome);
 
-        tv_splash_app_name = (TextView)findViewById(R.id.tv_splash_app_name);
+//        tv_splash_app_name = (TextView)findViewById(R.id.tv_splash_app_name);
 
 
         Handler handler = new Handler();
