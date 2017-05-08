@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/bird1/AndroidStudioProjects/ForecastBlast/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/Users/bird1/AndroidStudioProjects/ForecastBlast/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_ecf005717c1189b0a872126ce4edaea77a96e467/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/bird1/AndroidStudioProjects/ForecastBlast/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bf505f39d7b41ce0062f9d6ee3b601cd6087a799">
+        <dex dex="/Users/bird1/AndroidStudioProjects/ForecastBlast/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_af0d728139be52dd57976af65fcb9a01f4b39d27/classes.dex" />
+    </item>
+
+</items>

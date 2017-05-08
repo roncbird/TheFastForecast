@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="sky_dark_blue">#283f69</color>
+    <color name="blue_text">#013668</color>
+    <color name="blue_text_40_opacity">#66013668</color>
+    <color name="blue_text_50_opacity">#81013668</color>
+    <color name="blue_text_70_opacity">#b3013668</color>
+
+    <color name="black_20_opacity">#33000000</color>
+    <color name="black_30_opacity">#4D000000</color>
+    <color name="black_40_opacity">#66000000</color>
+    <color name="black_50_opacity">#81000000</color>
+    <color name="black_70_opacity">#B3000000</color>
+    <color name="black_80_opacity">#CC000000</color>
+
+    <color name="white_5_opacity">#05FFFFFF</color>
+    <color name="white_10_opacity">#0AFFFFFF</color>
+    <color name="white_15_opacity">#15FFFFFF</color>
+    <color name="white_25_opacity">#40FFFFFF</color>
+    <color name="white_30_opacity">#4DFFFFFF</color>
+    <color name="white_20_opacity">#33FFFFFF</color>
+    <color name="white_40_opacity">#66FFFFFF</color>
+    <color name="white_50_opacity">#81FFFFFF</color>
+    <color name="white_70_opacity">#B3FFFFFF</color>
+    <color name="white_80_opacity">#CCFFFFFF</color>
+
+    <color name="white">#FFFFFF</color>
+
+</resources>

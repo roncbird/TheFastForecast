@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">The Fast Forecast</string>
+
+    <!--Fontawesome TextViews-->
+    <string name="tv_cloud">&#xf0c2;</string>
+    <string name="tv_sun">&#xf185;</string>
+    <string name="tv_back_icon">&#xf053;</string>
+    <string name="selected_check_mark">&#xf00c;</string>
+    <!--<string name="selected_check_mark">&#xf05d;</string>-->
+    <string name="done_icon">&#xf135;</string>
+    <string name="cancel_icon">&#xf00d;</string>
+
+    <!--WeatherFragment TextViews-->
+    <string name="tv_cities_header">Weather By City</string>
+    <string name="tv_add_city">Add or Remove Cities</string>
+
+    <!--WeatherDetail Fragment TextViews-->
+    <string name="tv_back">Back</string>
+
+    <!--CitySelection Fragment TextViews-->
+    <string name="tv_select_city">Select Cities</string>
+    <string name="et_hint_type_city_name">Type City Name to Filter List</string>
+    <string name="et_hint_filter_cities">Enter a city name to filter list</string>
+    <string name="tv_done">Done</string>
+    <string name="tv_cancel">Cancel</string>
+    <string name="alert_do_you_want_to_quit">Any unsaved changes will be lost.\nAre you sure you want to quit?</string>
+    <string name="alert_ok">Ok</string>
+    <string name="alert_cancel">Cancel</string>
+
+    <!--SplashActivity TextViews-->
+    <string name="tv_at_last_forecast">The Fast Forecast</string>
+    <string name="alert_no_network_connectivity">At Last The Forecast requires network connectivity to function. Please enable your network connection and restart the app.</string>
+
+
+</resources>
