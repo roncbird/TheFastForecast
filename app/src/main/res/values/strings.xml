@@ -30,7 +30,7 @@
 
     <!--SplashActivity TextViews-->
     <string name="tv_the_fast_forecast">The Fast Forecast</string>
-    <string name="alert_no_network_connectivity">At Last The Forecast requires network connectivity to function. Please enable your network connection and restart the app.</string>
+    <string name="alert_no_network_connectivity">The Fast Forecast requires network connectivity to function. Please enable your network connection and restart the app.</string>
 
 
 </resources>
