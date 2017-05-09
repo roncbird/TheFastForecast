@@ -26,6 +26,7 @@
     <string name="alert_do_you_want_to_quit">Any unsaved changes will be lost.\nAre you sure you want to quit?</string>
     <string name="alert_ok">Ok</string>
     <string name="alert_cancel">Cancel</string>
+    <string name="alert_select_only_20_cities">Please select no more than 20 cities at a time.</string>
 
     <!--SplashActivity TextViews-->
     <string name="tv_the_fast_forecast">The Fast Forecast</string>

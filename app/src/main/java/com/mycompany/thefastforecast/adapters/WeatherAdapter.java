@@ -80,51 +80,50 @@ public class WeatherAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        viewHolder.tv_city_name.setText((String)mWeatherArrayList.get(position).get("cityName"));
+
+        if(mWeatherArrayList.size() > 0) {
+            viewHolder.tv_city_name.setText((String) mWeatherArrayList.get(position).get("cityName"));
 
 
-        String currentTemp = Methods.formatTemperature((String)mWeatherArrayList.get(position).get("currentTemp"));
+            String currentTemp = Methods.formatTemperature((String) mWeatherArrayList.get(position).get("currentTemp"));
 
-        viewHolder.tv_current_temperature.setText(currentTemp + " \u2109");
-        viewHolder.iv_weather_icon.setImageBitmap((Bitmap)mWeatherArrayList.get(position).get("icon"));
+            viewHolder.tv_current_temperature.setText(currentTemp + " \u2109");
+            viewHolder.iv_weather_icon.setImageBitmap((Bitmap) mWeatherArrayList.get(position).get("icon"));
 
-        if(position <= 2)
-        {
-            viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
-            viewHolder.tv_delete_city.setTypeface(fontAwesome);
-            viewHolder.tv_delete_city.setAlpha((float).25);
-        }
-        else
-        {
-            viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
-            viewHolder.tv_delete_city.setTypeface(fontAwesome);
-            viewHolder.tv_delete_city.setAlpha((float)1);
-            viewHolder.tv_delete_city.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (position <= 2) {
+                viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
+                viewHolder.tv_delete_city.setTypeface(fontAwesome);
+                viewHolder.tv_delete_city.setAlpha((float) .25);
+            } else {
+                viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
+                viewHolder.tv_delete_city.setTypeface(fontAwesome);
+                viewHolder.tv_delete_city.setAlpha((float) 1);
+                viewHolder.tv_delete_city.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    JSONObject cityWeatherJsonObject = null;
-                    try {
-                        cityWeatherJsonObject = new JSONObject(WeatherFragment.mWeatherJsonString);
-                        JSONArray cityWeatherJsonArray = cityWeatherJsonObject.getJSONArray("list");
-                        cityWeatherJsonArray.remove(position);
-                        cityWeatherJsonObject.put("list", cityWeatherJsonArray);
-                        WeatherFragment.mWeatherJsonString = cityWeatherJsonObject.toString();
-                        Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
-                        MainActivity.loadDataFromSharedPreference = false;
-                    } catch (JSONException e)
-                    {
-                        e.printStackTrace();
+                        JSONObject cityWeatherJsonObject = null;
+                        try {
+                            cityWeatherJsonObject = new JSONObject(WeatherFragment.mWeatherJsonString);
+                            JSONArray cityWeatherJsonArray = cityWeatherJsonObject.getJSONArray("list");
+                            cityWeatherJsonArray.remove(position);
+                            cityWeatherJsonObject.put("list", cityWeatherJsonArray);
+                            WeatherFragment.mWeatherJsonString = cityWeatherJsonObject.toString();
+                            Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
+                            MainActivity.loadDataFromSharedPreference = false;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        mWeatherArrayList.remove(position);
+                        userSelectedCityIds.remove(position);
+                        userSelectedCityNames.remove(position);
+                        notifyDataSetChanged();
+
                     }
-
-
-                    mWeatherArrayList.remove(position);
-                    userSelectedCityIds.remove(position);
-                    userSelectedCityNames.remove(position);
-                    notifyDataSetChanged();
-
-                }
-            });
+                });
+            }
         }
 
         return convertView;

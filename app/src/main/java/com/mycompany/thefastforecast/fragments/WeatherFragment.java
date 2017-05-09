@@ -55,6 +55,7 @@ public class WeatherFragment extends Fragment {
 
     private ArrayList<HashMap<String, Object>> mCityWeatherList = new ArrayList<>();
     private ArrayList<String> userSelectedCityIds = new ArrayList<>();
+    private ArrayList<String> userSelectedCityIdsForUrl = new ArrayList<>();
     private ArrayList<String> userSelectedCityNames = new ArrayList<>();
     private ListView lv_city_weather;
 
@@ -69,6 +70,10 @@ public class WeatherFragment extends Fragment {
     private String selectedCityIDs = "";
     public static String mWeatherJsonString = "";
 
+    private boolean sendNetworkRequest = true;
+
+    private URL cityForcastUrl = null;
+
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -79,57 +84,6 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        URL cityForcastUrl = null;
-        try {
-            if(userSelectedCityIds.size() > 0)
-            {
-
-                selectedCityIDs = "";
-
-                for(int i = 0; i < userSelectedCityIds.size(); i++)
-                {
-                    if(i < userSelectedCityIds.size() - 1 )
-                    {
-                        selectedCityIDs += userSelectedCityIds.get(i) + ",";
-                    }
-                    else
-                    {
-                        selectedCityIDs += userSelectedCityIds.get(i);
-                    }
-                }
-            }
-            else
-            {
-                selectedCityIDs = "";
-                selectedCityIDs = "5780993,5128638,5391959";
-            }
-            cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=da65fafb6cb9242168b7724fb5ab75e7");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if(!Methods.isOnline(getContext()))
-        {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder
-                    .setMessage(R.string.alert_no_network_connectivity)
-                    .setCancelable(false)
-                    .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            dialog.dismiss();
-
-                        }
-                    });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        }
-        else
-        {
-            CityWeather cityWeather = new CityWeather();
-            cityWeather.execute(cityForcastUrl);
-        }
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_weather, container, false);
@@ -138,6 +92,91 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(sendNetworkRequest)
+        {
+
+            if (!Methods.isOnline(getContext()))
+            {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                alertDialogBuilder
+                        .setMessage(R.string.alert_no_network_connectivity)
+                        .setCancelable(false)
+                        .setPositiveButton("Dismiss", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+
+                                dialog.dismiss();
+
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+            else
+            {
+
+                if(Methods.retrieveBoolean(getContext(), "appLoadedForFirstTime"))
+                {
+                    selectedCityIDs = "";
+                    selectedCityIDs = "5780993,5128638,5391959";
+                    try {
+                        cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=da65fafb6cb9242168b7724fb5ab75e7");
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                {
+
+                    try {
+                        if (userSelectedCityIdsForUrl.size() > 0)
+                        {
+
+                            selectedCityIDs = "";
+
+                            for (int i = 0; i < userSelectedCityIdsForUrl.size(); i++)
+                            {
+                                if (i < userSelectedCityIdsForUrl.size() - 1)
+                                {
+                                    selectedCityIDs += userSelectedCityIdsForUrl.get(i) + ",";
+                                }
+                                else
+                                {
+                                    selectedCityIDs += userSelectedCityIdsForUrl.get(i);
+                                }
+                            }
+
+                            cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=da65fafb6cb9242168b7724fb5ab75e7");
+                        }
+                        else
+                        {
+                            cityForcastUrl = null;
+                        }
+
+
+                    }
+                    catch (MalformedURLException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                CityWeather cityWeather = new CityWeather();
+                cityWeather.execute(cityForcastUrl);
+
+            }
+
+
+        }
+        else
+        {
+            sendNetworkRequest = true;
+        }
 
         mWeatherAdapter = new WeatherAdapter(getActivity(), 0, mCityWeatherList, userSelectedCityIds, userSelectedCityNames );
         lv_city_weather = (ListView)view.findViewById(R.id.lv_city_weather);
@@ -148,7 +187,7 @@ public class WeatherFragment extends Fragment {
 
                 onWeatherItemClickListener.onWeatherItemClicked(mCityWeatherList.get(position));
 
-                mCityWeatherList.clear();
+                sendNetworkRequest = false;
 
             }
         });
@@ -159,9 +198,8 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                userSelectedCityIdsForUrl.clear();
                 onAddCityClickListener.onAddCityClicked(userSelectedCityIds, userSelectedCityNames);
-
-                mCityWeatherList.clear();
             }
         });
 
@@ -192,6 +230,13 @@ public class WeatherFragment extends Fragment {
                 mWeatherJsonString = Methods.retrieveString(getActivity(), "cityWeatherJsonString");
                 loadWeatherData(Methods.retrieveString(getActivity(), "cityWeatherJsonString"));
                 return Methods.retrieveString(getActivity(), "cityWeatherJsonString");
+            }
+
+            if(params[0] == null)
+            {
+                loadWeatherData(WeatherFragment.mWeatherJsonString);
+
+                return WeatherFragment.mWeatherJsonString;
             }
 
             StringBuilder results = new StringBuilder();
@@ -233,11 +278,43 @@ public class WeatherFragment extends Fragment {
 
             }
 
-            mWeatherJsonString = results.toString();
+            if(Methods.retrieveBoolean(getContext(), "appLoadedForFirstTime"))
+            {
+                loadWeatherData(results.toString());
+                mWeatherJsonString = results.toString();
+                Methods.saveBoolean(getContext(), "appLoadedForFirstTime", false);
+            }
+            else
+            {
 
-            loadWeatherData(mWeatherJsonString);
+                try
+                {
+                    JSONObject weatherJsonObject = null;
+                    weatherJsonObject = new JSONObject(WeatherFragment.mWeatherJsonString);
+                    JSONArray cityWeatherJsonArray = weatherJsonObject.getJSONArray("list");
 
-            return mWeatherJsonString;
+                    JSONObject jsonObjectLevel1 = new JSONObject(results.toString());
+                    JSONArray jsonArray = jsonObjectLevel1.getJSONArray("list");
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObjectLevel2 = jsonArray.getJSONObject(i);
+                        cityWeatherJsonArray.put(jsonObjectLevel2);
+                    }
+
+                    weatherJsonObject.put("list", cityWeatherJsonArray);
+                    WeatherFragment.mWeatherJsonString = weatherJsonObject.toString();
+                    Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
+
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+
+                loadWeatherData(WeatherFragment.mWeatherJsonString);
+            }
+
+            return WeatherFragment.mWeatherJsonString;
 
 
         }
@@ -250,7 +327,11 @@ public class WeatherFragment extends Fragment {
                 dialog.dismiss();
             }
 
-            mWeatherAdapter.notifyDataSetChanged();
+            if(!result.equals(""))
+            {
+                mWeatherAdapter.notifyDataSetChanged();
+            }
+
         }
 
         public void loadWeatherData(String jsonResults)
@@ -261,6 +342,7 @@ public class WeatherFragment extends Fragment {
 
                 userSelectedCityIds.clear();
                 userSelectedCityNames.clear();
+                mCityWeatherList.clear();
 
                 JSONObject cityWeatherJsonObject = new JSONObject(jsonResults);
                 JSONArray cityWeatherJsonArray = cityWeatherJsonObject.getJSONArray("list");
@@ -343,12 +425,14 @@ public class WeatherFragment extends Fragment {
         super.onPause();
     }
 
-    public void updateSelectedIdsArray(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames)
+    public void updateSelectedIdsArray(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames, ArrayList<String> selectedCityIdsForUrl)
     {
         userSelectedCityNames.clear();
+        userSelectedCityNames.addAll(selectedCityNames);
         userSelectedCityIds.clear();
         userSelectedCityIds.addAll(selectedCityIds);
-        userSelectedCityNames.addAll(selectedCityNames);
+        userSelectedCityIdsForUrl.clear();
+        userSelectedCityIdsForUrl.addAll(selectedCityIdsForUrl);
     }
 
     @Override

@@ -130,10 +130,10 @@ public class MainActivity extends AppCompatActivity implements WeatherFragment.O
     }
 
     @Override
-    public void onDoneClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames ) {
+    public void onDoneClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames, ArrayList<String> selectedCityIdsForUrl ) {
 
         WeatherFragment weatherFragment = (WeatherFragment)getSupportFragmentManager().findFragmentByTag("WeatherFragment");
-        weatherFragment.updateSelectedIdsArray(selectedCityIds, selectedCityNames);
+        weatherFragment.updateSelectedIdsArray(selectedCityIds, selectedCityNames, selectedCityIdsForUrl);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
@@ -178,5 +178,12 @@ public class MainActivity extends AppCompatActivity implements WeatherFragment.O
 
         registerReceiver(broadcastReceiver, new IntentFilter(
                 ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unregisterReceiver(broadcastReceiver);
     }
 }

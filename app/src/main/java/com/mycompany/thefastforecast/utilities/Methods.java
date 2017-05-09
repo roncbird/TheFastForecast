@@ -77,8 +77,6 @@ public class Methods {
     public static ArrayList<HashMap<String, String>> sortCityNamesAndIds(Context context)
     {
         ArrayList<String> unsortedCityNamesList = new ArrayList<>();
-        ArrayList<String> sortedCityNamesList = new ArrayList<>();
-        ArrayList<String> sortedCityIdList = new ArrayList<>();
         ArrayList<HashMap<String, String>> cityArrayList = new ArrayList<>();
         String cityJSONString;
 
@@ -98,12 +96,10 @@ public class Methods {
             for(int i = 0; i < unsortedCityNamesList.size(); i++)
             {
                 String cityNameAndId = unsortedCityNamesList.get(i);
-                sortedCityNamesList.add(cityNameAndId.substring(0, cityNameAndId.lastIndexOf(" ")));
-                sortedCityIdList.add(cityNameAndId.substring(cityNameAndId.lastIndexOf(" ") + 1, cityNameAndId.length()));
 
                 HashMap<String, String> cityListHashMap = new HashMap<>();
-                cityListHashMap.put("cityName", sortedCityNamesList.get(i));
-                cityListHashMap.put("id", sortedCityIdList.get(i));
+                cityListHashMap.put("cityName", cityNameAndId.substring(0, cityNameAndId.lastIndexOf(" ")));
+                cityListHashMap.put("id", cityNameAndId.substring(cityNameAndId.lastIndexOf(" ") + 1, cityNameAndId.length()));
                 cityArrayList.add(cityListHashMap);
             }
 
@@ -129,15 +125,27 @@ public class Methods {
 
 
     public static void saveString(Context mContext, String key, String value){
-        SharedPreferences settings = mContext.getSharedPreferences("forcastBlast", 0);
+        SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
     public static String retrieveString(Context mContext, String key){
-        SharedPreferences settings = mContext.getSharedPreferences("forcastBlast", 0);
+        SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
         return settings.getString(key, "");
+    }
+
+    public static void saveBoolean(Context mContext, String key, boolean value){
+        SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    public static boolean retrieveBoolean(Context mContext, String key){
+        SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
+        return settings.getBoolean(key, true);
     }
 
     public static boolean isOnline(Context context)

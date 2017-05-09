@@ -15,9 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.adapters.CitySelectionAdapter;
 import com.mycompany.thefastforecast.R;
+import com.mycompany.thefastforecast.activities.MainActivity;
+import com.mycompany.thefastforecast.adapters.CitySelectionAdapter;
 import com.mycompany.thefastforecast.utilities.FontCache;
+import com.mycompany.thefastforecast.utilities.Methods;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +36,7 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
 
     public interface OnDoneClickListener
     {
-        void onDoneClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames);
+        void onDoneClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames, ArrayList<String> selectedCityIdsForUrl);
     }
 
     private Typeface fontAwesome;
@@ -40,12 +46,19 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
 
     private ArrayList<String> userSelectedCityNames = new ArrayList<>();
     private ArrayList<String> userSelectedCityIDs = new ArrayList<>();
+    private ArrayList<String> selectedCityIDsForUrl = new ArrayList<>();
     private ArrayList<HashMap<String, String>> cityArrayList = new ArrayList<>();
 
     private TextView tv_done_icon;
     private TextView tv_cancel_icon;
 
+    private String oldWeatherJsonString;
+
     private OnDoneClickListener onDoneClickListener;
+
+    private boolean doneButtonClicked = false;
+
+    private int citySelectionCount = 0;
 
 
     public CitySelectionFragment() {
@@ -59,6 +72,7 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
 
         fontAwesome = FontCache.get("fontawesome-webfont.ttf", getContext());
 
+        oldWeatherJsonString = WeatherFragment.mWeatherJsonString;
 
         if(getArguments() != null)
         {
@@ -105,15 +119,67 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
 
                 if(tv_city_selected_icon.getVisibility() == View.INVISIBLE)
                 {
-                    tv_city_selected_icon.setVisibility(View.VISIBLE);
-                    userSelectedCityNames.add(cityArrayList.get(position).get("cityName"));
-                    userSelectedCityIDs.add(cityArrayList.get(position).get("id"));
+
+                    if(citySelectionCount > 19)
+                    {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                        alertDialogBuilder
+                                .setMessage(R.string.alert_select_only_20_cities)
+                                .setCancelable(false)
+                                .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                    else
+                    {
+                        citySelectionCount++;
+                        tv_city_selected_icon.setVisibility(View.VISIBLE);
+                        userSelectedCityNames.add(cityArrayList.get(position).get("cityName"));
+                        userSelectedCityIDs.add(cityArrayList.get(position).get("id"));
+                        selectedCityIDsForUrl.add(cityArrayList.get(position).get("id"));
+                    }
+
+
                 }
                 else
                 {
+                    if(citySelectionCount > 0)
+                    {
+                        citySelectionCount--;
+                    }
+
                     tv_city_selected_icon.setVisibility(View.INVISIBLE);
                     userSelectedCityNames.remove(cityArrayList.get(position).get("cityName"));
                     userSelectedCityIDs.remove(cityArrayList.get(position).get("id"));
+                    selectedCityIDsForUrl.remove(cityArrayList.get(position).get("id"));
+
+                    JSONObject cityWeatherJsonObject = null;
+                    try {
+                        cityWeatherJsonObject = new JSONObject(WeatherFragment.mWeatherJsonString);
+                        JSONArray cityWeatherJsonArray = cityWeatherJsonObject.getJSONArray("list");
+                        for(int i = 0; i < cityWeatherJsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = cityWeatherJsonArray.getJSONObject(i);
+                            if(jsonObject.getString("id").equals(cityArrayList.get(position).get("id")))
+                            {
+                                cityWeatherJsonArray.remove(i);
+                            }
+                        }
+                        cityWeatherJsonObject.put("list", cityWeatherJsonArray);
+                        WeatherFragment.mWeatherJsonString = cityWeatherJsonObject.toString();
+                        Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
+                        MainActivity.loadDataFromSharedPreference = false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
             }
 
@@ -145,9 +211,14 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                 alert.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        getActivity().onBackPressed();
                         userSelectedCityNames.clear();
                         userSelectedCityIDs.clear();
+                        selectedCityIDsForUrl.clear();
+
+                        WeatherFragment.mWeatherJsonString = oldWeatherJsonString;
+                        Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
+
+                        getActivity().onBackPressed();
                     }
                 });
                 alert.setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
@@ -163,7 +234,8 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.ll_done_button:
 
-                onDoneClickListener.onDoneClicked(userSelectedCityIDs, userSelectedCityNames);
+                doneButtonClicked = true;
+                onDoneClickListener.onDoneClicked(userSelectedCityIDs, userSelectedCityNames, selectedCityIDsForUrl);
 
                 break;
         }
@@ -181,6 +253,17 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
 
             throw new ClassCastException(context.toString() + "must implement"
                     + CitySelectionFragment.OnDoneClickListener.class.getSimpleName());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(!doneButtonClicked)
+        {
+            WeatherFragment.mWeatherJsonString = oldWeatherJsonString;
+            Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
         }
     }
 }
