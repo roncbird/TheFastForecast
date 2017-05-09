@@ -66,8 +66,7 @@ public class WeatherAdapter extends ArrayAdapter {
             convertView = layoutInflater.inflate(R.layout.listview_weather_item, parent, false );
 
             viewHolder = new ViewHolder();
-            viewHolder.tv_city_name = (TextView)convertView.findViewById(R.id.tv_city_name);
-            viewHolder.tv_current_temperature = (TextView)convertView.findViewById(R.id.tv_current_temperature);
+            viewHolder.tv_city_name_and_temp = (TextView)convertView.findViewById(R.id.tv_city_name_and_temp);
             viewHolder.iv_weather_icon = (ImageView) convertView.findViewById(R.id.iv_weather_icon);
             viewHolder.tv_delete_city = (TextView) convertView.findViewById(R.id.tv_delete_city);
 
@@ -82,12 +81,12 @@ public class WeatherAdapter extends ArrayAdapter {
 
 
         if(mWeatherArrayList.size() > 0) {
-            viewHolder.tv_city_name.setText((String) mWeatherArrayList.get(position).get("cityName"));
 
 
             String currentTemp = Methods.formatTemperature((String) mWeatherArrayList.get(position).get("currentTemp"));
 
-            viewHolder.tv_current_temperature.setText(currentTemp + " \u2109");
+            viewHolder.tv_city_name_and_temp.setText((String) mWeatherArrayList.get(position).get("cityName") + "     " + currentTemp + " \u2109");
+            viewHolder.tv_city_name_and_temp.setSelected(true);
             viewHolder.iv_weather_icon.setImageBitmap((Bitmap) mWeatherArrayList.get(position).get("icon"));
 
             if (position <= 2) {
@@ -132,8 +131,7 @@ public class WeatherAdapter extends ArrayAdapter {
     public class ViewHolder
     {
 
-        TextView tv_city_name;
-        TextView tv_current_temperature;
+        TextView tv_city_name_and_temp;
         ImageView iv_weather_icon;
         TextView tv_delete_city;
 
