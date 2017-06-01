@@ -10,15 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.activities.MainActivity;
-import com.mycompany.thefastforecast.fragments.WeatherFragment;
 import com.mycompany.thefastforecast.R;
+import com.mycompany.thefastforecast.fragments.Constants;
 import com.mycompany.thefastforecast.utilities.FontCache;
 import com.mycompany.thefastforecast.utilities.Methods;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,12 +33,10 @@ public class WeatherAdapter extends ArrayAdapter {
 
     private ArrayList<HashMap<String, Object>> mWeatherArrayList = new ArrayList<>();
     private ArrayList<String> userSelectedCityIds;
-    private ArrayList<String> userSelectedCityNames;
 
     private Typeface fontAwesome;
 
-    public WeatherAdapter(Context context, int resource, ArrayList<HashMap<String, Object>> weatherArrayList,
-                          ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames) {
+    public WeatherAdapter(Context context, int resource, ArrayList<HashMap<String, Object>> weatherArrayList) {
         super(context, resource);
 
         fontAwesome = FontCache.get("fontawesome-webfont.ttf", getContext());
@@ -48,9 +44,6 @@ public class WeatherAdapter extends ArrayAdapter {
         mContext = context;
 
         mWeatherArrayList = weatherArrayList;
-
-        userSelectedCityIds = selectedCityIds;
-        userSelectedCityNames = selectedCityNames;
     }
 
     @Override
@@ -101,23 +94,18 @@ public class WeatherAdapter extends ArrayAdapter {
                     @Override
                     public void onClick(View v) {
 
-                        JSONObject cityWeatherJsonObject = null;
+                        JSONArray selectedCityIdsJsonArray = null;
                         try {
-                            cityWeatherJsonObject = new JSONObject(WeatherFragment.mWeatherJsonString);
-                            JSONArray cityWeatherJsonArray = cityWeatherJsonObject.getJSONArray("list");
-                            cityWeatherJsonArray.remove(position);
-                            cityWeatherJsonObject.put("list", cityWeatherJsonArray);
-                            WeatherFragment.mWeatherJsonString = cityWeatherJsonObject.toString();
-                            Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
-                            MainActivity.loadDataFromSharedPreference = false;
+                            selectedCityIdsJsonArray = new JSONArray(Methods.retrieveJSONString(getContext(),
+                                    Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY));
+                            selectedCityIdsJsonArray.remove(position);
+                            Methods.saveString(getContext(), Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY, selectedCityIdsJsonArray.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
 
                         mWeatherArrayList.remove(position);
-                        userSelectedCityIds.remove(position);
-                        userSelectedCityNames.remove(position);
                         notifyDataSetChanged();
 
                     }

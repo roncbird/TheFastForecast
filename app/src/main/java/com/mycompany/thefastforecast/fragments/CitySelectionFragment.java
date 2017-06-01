@@ -2,7 +2,6 @@ package com.mycompany.thefastforecast.fragments;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,17 +15,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.activities.MainActivity;
 import com.mycompany.thefastforecast.adapters.CitySelectionAdapter;
 import com.mycompany.thefastforecast.utilities.FontCache;
 import com.mycompany.thefastforecast.utilities.Methods;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.mycompany.thefastforecast.fragments.Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY;
 
 
 /**
@@ -34,29 +33,17 @@ import java.util.HashMap;
  */
 public class CitySelectionFragment extends Fragment implements View.OnClickListener {
 
-    public interface OnDoneClickListener
-    {
-        void onDoneClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames, ArrayList<String> selectedCityIdsForUrl);
-    }
 
     private Typeface fontAwesome;
 
     private CitySelectionAdapter citySelectionAdapter;
     private ListView lv_city_selection_list;
 
-    private ArrayList<String> userSelectedCityNames = new ArrayList<>();
     private ArrayList<String> userSelectedCityIDs = new ArrayList<>();
-    private ArrayList<String> selectedCityIDsForUrl = new ArrayList<>();
     private ArrayList<HashMap<String, String>> cityArrayList = new ArrayList<>();
 
     private TextView tv_done_icon;
     private TextView tv_cancel_icon;
-
-    private String oldWeatherJsonString;
-
-    private OnDoneClickListener onDoneClickListener;
-
-    private boolean doneButtonClicked = false;
 
     private int citySelectionCount = 0;
 
@@ -72,28 +59,42 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
 
         fontAwesome = FontCache.get("fontawesome-webfont.ttf", getContext());
 
-        oldWeatherJsonString = WeatherFragment.mWeatherJsonString;
+        JSONArray selectedCityIdsJsonArray = null;
+        try {
+
+            if(Methods.retrieveJSONString(getContext(), SELECTED_CITY_IDS_JSON_STRING_KEY) != null)
+            {
+
+                selectedCityIdsJsonArray = new JSONArray(Methods.retrieveJSONString(getContext(), SELECTED_CITY_IDS_JSON_STRING_KEY));
+
+                if (selectedCityIdsJsonArray != null)
+                {
+                    userSelectedCityIDs.clear();
+
+                    for (int i = 0; i < selectedCityIdsJsonArray.length(); i++)
+                    {
+                        userSelectedCityIDs.add(selectedCityIdsJsonArray.getString(i));
+                    }
+
+                }
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+
+
 
         if(getArguments() != null)
         {
-            if(getArguments().getStringArrayList("selectedCityNames") != null)
-            {
-                userSelectedCityNames.clear();
-                userSelectedCityNames.addAll(getArguments().getStringArrayList("selectedCityNames"));
-            }
-
-            if(getArguments().getStringArrayList("selectedCityIds") != null)
-            {
-                userSelectedCityIDs.clear();
-                userSelectedCityIDs.addAll(getArguments().getStringArrayList("selectedCityIds"));
-            }
 
             if(getArguments().getStringArrayList("cityArrayList") != null)
             {
                 cityArrayList.clear();
                 cityArrayList.addAll((ArrayList<HashMap<String, String>>)getArguments().getSerializable("cityArrayList"));
             }
-
 
 
         }
@@ -140,9 +141,7 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                     {
                         citySelectionCount++;
                         tv_city_selected_icon.setVisibility(View.VISIBLE);
-                        userSelectedCityNames.add(cityArrayList.get(position).get("cityName"));
                         userSelectedCityIDs.add(cityArrayList.get(position).get("id"));
-                        selectedCityIDsForUrl.add(cityArrayList.get(position).get("id"));
                     }
 
 
@@ -155,30 +154,7 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                     }
 
                     tv_city_selected_icon.setVisibility(View.INVISIBLE);
-                    userSelectedCityNames.remove(cityArrayList.get(position).get("cityName"));
                     userSelectedCityIDs.remove(cityArrayList.get(position).get("id"));
-                    selectedCityIDsForUrl.remove(cityArrayList.get(position).get("id"));
-
-                    JSONObject cityWeatherJsonObject = null;
-                    try {
-                        cityWeatherJsonObject = new JSONObject(WeatherFragment.mWeatherJsonString);
-                        JSONArray cityWeatherJsonArray = cityWeatherJsonObject.getJSONArray("list");
-                        for(int i = 0; i < cityWeatherJsonArray.length(); i++)
-                        {
-                            JSONObject jsonObject = cityWeatherJsonArray.getJSONObject(i);
-                            if(jsonObject.getString("id").equals(cityArrayList.get(position).get("id")))
-                            {
-                                cityWeatherJsonArray.remove(i);
-                            }
-                        }
-                        cityWeatherJsonObject.put("list", cityWeatherJsonArray);
-                        WeatherFragment.mWeatherJsonString = cityWeatherJsonObject.toString();
-                        Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
-                        MainActivity.loadDataFromSharedPreference = false;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
 
                 }
             }
@@ -211,12 +187,6 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                 alert.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        userSelectedCityNames.clear();
-                        userSelectedCityIDs.clear();
-                        selectedCityIDsForUrl.clear();
-
-                        WeatherFragment.mWeatherJsonString = oldWeatherJsonString;
-                        Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
 
                         getActivity().onBackPressed();
                     }
@@ -234,36 +204,20 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.ll_done_button:
 
-                doneButtonClicked = true;
-                onDoneClickListener.onDoneClicked(userSelectedCityIDs, userSelectedCityNames, selectedCityIDsForUrl);
+                JSONArray jsonArray = new JSONArray();
+
+                for(int i = 0; i < userSelectedCityIDs.size(); i++)
+                {
+                    jsonArray.put(userSelectedCityIDs.get(i));
+                }
+
+                Methods.saveJSONString(getContext(), SELECTED_CITY_IDS_JSON_STRING_KEY, jsonArray.toString());
+
+                getActivity().onBackPressed();
 
                 break;
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        if(context instanceof OnDoneClickListener)
-        {
-            onDoneClickListener = (OnDoneClickListener)context;
-        }
-        else {
-
-            throw new ClassCastException(context.toString() + "must implement"
-                    + CitySelectionFragment.OnDoneClickListener.class.getSimpleName());
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if(!doneButtonClicked)
-        {
-            WeatherFragment.mWeatherJsonString = oldWeatherJsonString;
-            Methods.saveString(getContext(), "cityWeatherJsonString", WeatherFragment.mWeatherJsonString);
-        }
-    }
 }

@@ -34,9 +34,11 @@ public class Methods {
         Pattern pattern1 = Pattern.compile("\\{([\\s\\S]*?)\\}([\\s\\S]*?)\\}");
         Matcher matcher1 = pattern1.matcher(cityJSONString);
 
+        Pattern pattern2 = Pattern.compile("\"country\":([\\s\\S]*?)\"US\"", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
         while(matcher1.find())
         {
-            Pattern pattern2 = Pattern.compile("\"country\":([\\s\\S]*?)\"US\"", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
             Matcher matcher2 = pattern2.matcher(matcher1.group(0));
 
             Log.e("matcher1", matcher1.group(0) + "");
@@ -80,7 +82,7 @@ public class Methods {
         ArrayList<HashMap<String, String>> cityArrayList = new ArrayList<>();
         String cityJSONString;
 
-        cityJSONString = Methods.loadJsonFile(context);
+        cityJSONString = loadJsonFile(context);
 
         try {
 
@@ -134,6 +136,18 @@ public class Methods {
     public static String retrieveString(Context mContext, String key){
         SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
         return settings.getString(key, "");
+    }
+
+    public static void saveJSONString(Context mContext, String key, String jsonArrayString){
+        SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(key, jsonArrayString);
+        editor.commit();
+    }
+
+    public static String retrieveJSONString(Context mContext, String key){
+        SharedPreferences settings = mContext.getSharedPreferences("theFastForcast", 0);
+        return settings.getString(key, null);
     }
 
     public static void saveBoolean(Context mContext, String key, boolean value){

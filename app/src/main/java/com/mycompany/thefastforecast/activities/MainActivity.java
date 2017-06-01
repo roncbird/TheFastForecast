@@ -1,19 +1,14 @@
 package com.mycompany.thefastforecast.activities;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mycompany.thefastforecast.R;
@@ -26,11 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements WeatherFragment.OnWeatherItemClickListener,
-        WeatherFragment.OnAddCityClickListener, CitySelectionFragment.OnDoneClickListener{
+        WeatherFragment.OnAddCityClickListener{
 
     int REQUEST_INTERNET_ACCESS = 1;
-
-    public static boolean loadDataFromSharedPreference;
 
     BroadcastReceiver broadcastReceiver;
 
@@ -41,40 +34,12 @@ public class MainActivity extends AppCompatActivity implements WeatherFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadDataFromSharedPreference = true;
-
         cityArrayList = Methods.sortCityNamesAndIds(this);
-
-        checkPermissions();
 
         FragmentTransaction mFragmentManager = getSupportFragmentManager().beginTransaction();
         mFragmentManager.replace(R.id.container, new WeatherFragment(), "WeatherFragment");
         mFragmentManager.commit();
 
-    }
-
-    private void checkPermissions() {
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.INTERNET)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.INTERNET)) {
-
-
-                } else {
-
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.INTERNET},
-                            REQUEST_INTERNET_ACCESS);
-
-                }
-            }
-        }
     }
 
 
@@ -101,44 +66,14 @@ public class MainActivity extends AppCompatActivity implements WeatherFragment.O
 
 
     @Override
-    public void onAddCityClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames) {
+    public void onAddCityClicked() {
 
-        if(selectedCityNames.size() > 0 && selectedCityIds.size() > 0)
-        {
-            CitySelectionFragment citySelectionFragment = new CitySelectionFragment();
-            Bundle args = new Bundle();
-            args.putStringArrayList("selectedCityNames", selectedCityNames );
-            args.putStringArrayList("selectedCityIds", selectedCityIds );
-            args.putSerializable("cityArrayList", cityArrayList);
-            citySelectionFragment.setArguments(args);
-
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.container, citySelectionFragment, "CitySelectionFragment").addToBackStack("WeatherFragment").commit();
-        }
-        else
-        {
-            CitySelectionFragment citySelectionFragment = new CitySelectionFragment();
-            Bundle args = new Bundle();
-            args.putSerializable("cityArrayList", cityArrayList);
-            citySelectionFragment.setArguments(args);
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.container, citySelectionFragment, "CitySelectionFragment").addToBackStack("WeatherFragment").commit();
-
-        }
-
-
-    }
-
-    @Override
-    public void onDoneClicked(ArrayList<String> selectedCityIds, ArrayList<String> selectedCityNames, ArrayList<String> selectedCityIdsForUrl ) {
-
-        WeatherFragment weatherFragment = (WeatherFragment)getSupportFragmentManager().findFragmentByTag("WeatherFragment");
-        weatherFragment.updateSelectedIdsArray(selectedCityIds, selectedCityNames, selectedCityIdsForUrl);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if (fragmentManager.getBackStackEntryCount() > 0) {
-            fragmentManager.popBackStack();
-        }
+        CitySelectionFragment citySelectionFragment = new CitySelectionFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("cityArrayList", cityArrayList);
+        citySelectionFragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, citySelectionFragment, "CitySelectionFragment").addToBackStack("WeatherFragment").commit();
 
 
     }
