@@ -69,7 +69,9 @@ public class CitySelectionAdapter extends ArrayAdapter{
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        viewHolder.tv_us_city_name.setText(cityArrayList.get(position).get("cityName"));
+        viewHolder.tv_us_city_name.setText(cityArrayList.get(position).get("cityName") + "," + " " +
+                cityArrayList.get(position).get("state"));
+        viewHolder.tv_us_city_name.setSelected(true);
 
         for(int i = 0; i < userSelectedCityIdsList.size(); i++ )
         {
