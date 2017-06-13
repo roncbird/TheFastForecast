@@ -85,6 +85,19 @@
 
     </RelativeLayout>
 
+    <SearchView
+        android:id="@+id/sv_city_list"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:queryHint="Search"
+        android:background="@drawable/listview_weather_item_background">
+
+
+    </SearchView>
+
 
     <ListView
         android:id="@+id/lv_city_selection_list"

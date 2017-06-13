@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.mycompany.thefastforecast.R;
@@ -31,7 +32,7 @@ import static com.mycompany.thefastforecast.fragments.Constants.SharedPrefrenceK
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CitySelectionFragment extends Fragment implements View.OnClickListener {
+public class CitySelectionFragment extends Fragment implements View.OnClickListener, CitySelectionAdapter.OnUpdateCityArrayListener {
 
 
     private Typeface fontAwesome;
@@ -46,6 +47,8 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
     private TextView tv_cancel_icon;
 
     private int citySelectionCount = 0;
+
+    private SearchView sv_city_list;
 
 
     public CitySelectionFragment() {
@@ -108,7 +111,8 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        citySelectionAdapter = new CitySelectionAdapter(getContext(), 0, cityArrayList, userSelectedCityIDs);
+
+        citySelectionAdapter = new CitySelectionAdapter(getContext(), 0, cityArrayList, userSelectedCityIDs, this);
         lv_city_selection_list = (ListView)view.findViewById(R.id.lv_city_selection_list);
         lv_city_selection_list.setTextFilterEnabled(true);
         lv_city_selection_list.setAdapter(citySelectionAdapter);
@@ -160,6 +164,23 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
             }
 
 
+        });
+
+        sv_city_list = (SearchView)view.findViewById(R.id.sv_city_list);
+
+        sv_city_list.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                citySelectionAdapter.getFilter().filter(newText);
+
+                return false;
+            }
         });
 
 
@@ -220,4 +241,10 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
     }
 
 
+    @Override
+    public void onUpdateCityArray(ArrayList<HashMap<String, String>> cityArrayList) {
+
+        this.cityArrayList = cityArrayList;
+
+    }
 }

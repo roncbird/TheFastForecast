@@ -6,6 +6,7 @@
         <item name="colorPrimary">@android:color/black</item>
         <item name="colorPrimaryDark">#0C426E</item>
         <item name="colorAccent">@color/blue_text</item>
+        <item name="android:editTextColor">@color/blue_text</item>
     </style>
 
 </resources>

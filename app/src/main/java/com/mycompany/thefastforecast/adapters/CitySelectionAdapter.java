@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.mycompany.thefastforecast.R;
@@ -20,24 +22,36 @@ import java.util.HashMap;
  * Created by bird1 on 5/2/17.
  */
 
-public class CitySelectionAdapter extends ArrayAdapter{
+public class CitySelectionAdapter extends ArrayAdapter implements Filterable{
+
+    public interface OnUpdateCityArrayListener
+    {
+        void onUpdateCityArray(ArrayList<HashMap<String, String>> cityArrayList);
+    }
+
+    private OnUpdateCityArrayListener onUpdateCityArrayListener;
 
     private Context mContext;
 
     private ViewHolder viewHolder;
 
     private ArrayList<HashMap<String, String>> cityArrayList = new ArrayList<>();
+    private ArrayList<HashMap<String, String>> originalCityArrayList = new ArrayList<>();
     private ArrayList<String> userSelectedCityIdsList = new ArrayList<>();
 
     private Typeface fontawesome;
 
     public CitySelectionAdapter(@NonNull Context context, @LayoutRes int resource,
-                                ArrayList<HashMap<String, String>> cityList, ArrayList<String> selectedCitysIdsList ) {
+                                ArrayList<HashMap<String, String>> cityList, ArrayList<String> selectedCitysIdsList,
+                                OnUpdateCityArrayListener arrayUpdateListener ) {
         super(context, resource);
 
         mContext = context;
         cityArrayList = cityList;
+        originalCityArrayList = cityList;
         userSelectedCityIdsList = selectedCitysIdsList;
+
+        onUpdateCityArrayListener = arrayUpdateListener;
 
         fontawesome = FontCache.get("fontawesome-webfont.ttf", mContext);
     }
@@ -94,4 +108,54 @@ public class CitySelectionAdapter extends ArrayAdapter{
         TextView tv_us_city_name;
         TextView tv_city_selected_icon;
     }
+
+
+    @Override
+    public Filter getFilter() {
+
+        Filter filter = new Filter() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                cityArrayList = (ArrayList<HashMap<String, String>>) results.values;
+                onUpdateCityArrayListener.onUpdateCityArray(cityArrayList);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults results = new FilterResults();
+
+                if(constraint == null || constraint.length() == 0)
+                {
+                    results.values = originalCityArrayList;
+                    results.count = originalCityArrayList.size();
+                }
+                else
+                {
+                    ArrayList<HashMap<String, String>> filteredCityNames = new ArrayList();
+
+                    constraint = constraint.toString().toLowerCase();
+                    for (int i = 0; i < originalCityArrayList.size(); i++) {
+                        String cityName = originalCityArrayList.get(i).get("cityName");
+                        if (cityName.toLowerCase().contains(constraint.toString()))  {
+                            filteredCityNames.add(originalCityArrayList.get(i));
+                        }
+                    }
+
+                    results.count = filteredCityNames.size();
+                    results.values = filteredCityNames;
+                }
+
+                return results;
+            }
+        };
+
+
+        return filter;
+    }
+
 }
