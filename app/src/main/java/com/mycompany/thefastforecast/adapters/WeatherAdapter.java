@@ -82,35 +82,30 @@ public class WeatherAdapter extends ArrayAdapter {
             viewHolder.tv_city_name_and_temp.setSelected(true);
             viewHolder.iv_weather_icon.setImageBitmap((Bitmap) mWeatherArrayList.get(position).get("icon"));
 
-            if (position <= 2) {
-                viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
-                viewHolder.tv_delete_city.setTypeface(fontAwesome);
-                viewHolder.tv_delete_city.setAlpha((float) .25);
-            } else {
-                viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
-                viewHolder.tv_delete_city.setTypeface(fontAwesome);
-                viewHolder.tv_delete_city.setAlpha((float) 1);
-                viewHolder.tv_delete_city.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            viewHolder.tv_delete_city.setVisibility(View.VISIBLE);
+            viewHolder.tv_delete_city.setTypeface(fontAwesome);
+            viewHolder.tv_delete_city.setAlpha((float) 1);
+            viewHolder.tv_delete_city.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        JSONArray selectedCityIdsJsonArray = null;
-                        try {
-                            selectedCityIdsJsonArray = new JSONArray(Methods.retrieveJSONString(getContext(),
-                                    Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY));
-                            selectedCityIdsJsonArray.remove(position);
-                            Methods.saveJSONString(getContext(), Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY, selectedCityIdsJsonArray.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        mWeatherArrayList.remove(position);
-                        notifyDataSetChanged();
-
+                    JSONArray selectedCityIdsJsonArray = null;
+                    try {
+                        selectedCityIdsJsonArray = new JSONArray(Methods.retrieveJSONString(getContext(),
+                                Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY));
+                        selectedCityIdsJsonArray.remove(position);
+                        Methods.saveJSONString(getContext(), Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY, selectedCityIdsJsonArray.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
-            }
+
+
+                    mWeatherArrayList.remove(position);
+                    notifyDataSetChanged();
+
+                }
+            });
+
         }
 
         return convertView;

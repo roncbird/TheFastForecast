@@ -13,6 +13,7 @@
     <!--WeatherFragment TextViews-->
     <string name="tv_cities_header">Weather By City</string>
     <string name="tv_add_city">Add or Remove Cities</string>
+    <string name="tv_empty_city_list">No cities to display</string>
 
     <!--WeatherDetail Fragment TextViews-->
     <string name="tv_back">Back</string>

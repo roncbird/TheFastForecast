@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mycompany.thefastforecast.R;
 import com.mycompany.thefastforecast.adapters.WeatherAdapter;
@@ -113,6 +114,8 @@ public class WeatherFragment extends Fragment {
 
         mWeatherAdapter = new WeatherAdapter(getActivity(), 0, mCityWeatherList);
         lv_city_weather = (ListView)view1.findViewById(R.id.lv_city_weather);
+        TextView tv_empty_city_list = (TextView)view1.findViewById(R.id.tv_empty_city_list);
+        lv_city_weather.setEmptyView(tv_empty_city_list);
         lv_city_weather.setAdapter(mWeatherAdapter);
         lv_city_weather.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
