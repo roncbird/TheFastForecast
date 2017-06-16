@@ -99,7 +99,7 @@ public class WeatherAdapter extends ArrayAdapter {
                             selectedCityIdsJsonArray = new JSONArray(Methods.retrieveJSONString(getContext(),
                                     Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY));
                             selectedCityIdsJsonArray.remove(position);
-                            Methods.saveString(getContext(), Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY, selectedCityIdsJsonArray.toString());
+                            Methods.saveJSONString(getContext(), Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY, selectedCityIdsJsonArray.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

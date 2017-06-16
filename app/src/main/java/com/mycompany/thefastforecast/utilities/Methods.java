@@ -1,5 +1,6 @@
 package com.mycompany.thefastforecast.utilities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
@@ -7,6 +8,8 @@ import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +31,8 @@ import java.util.regex.Pattern;
 public class Methods {
 
 
+    //Method was used on original list from openweathermap city.list.json, to
+    //get just U.S. cities.
     public static String parseUSCities(Context context)
     {
 
@@ -88,6 +93,8 @@ public class Methods {
     }
 
 
+    //Method was used to get the states each city resides in, by using
+    //the longitude and latitude in the json list provided by openweathermap
     public static void getStates(Context context)
     {
         Geocoder geocoder = new Geocoder(context);
@@ -236,6 +243,18 @@ public class Methods {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public static void hideKeyboard(Context ctx) {
+        InputMethodManager inputManager = (InputMethodManager) ctx
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // check if no view has focus:
+        View v = ((Activity) ctx).getCurrentFocus();
+        if (v == null)
+            return;
+
+        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
 }

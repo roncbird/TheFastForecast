@@ -88,8 +88,6 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
         }
 
 
-
-
         if(getArguments() != null)
         {
 
@@ -209,6 +207,7 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        Methods.hideKeyboard(getActivity());
                         getActivity().onBackPressed();
                     }
                 });
@@ -232,6 +231,7 @@ public class CitySelectionFragment extends Fragment implements View.OnClickListe
                     jsonArray.put(userSelectedCityIDs.get(i));
                 }
 
+                Methods.hideKeyboard(getActivity());
                 Methods.saveJSONString(getContext(), SELECTED_CITY_IDS_JSON_STRING_KEY, jsonArray.toString());
 
                 getActivity().onBackPressed();

@@ -200,7 +200,7 @@ public class WeatherFragment extends Fragment {
                     selectedCityIDs = "";
                     selectedCityIDs = "5780993,5128638,5391959";
                     try {
-                        cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=da65fafb6cb9242168b7724fb5ab75e7");
+                        cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=4f038c09700b461d5b938b10f273577a");
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
@@ -233,7 +233,7 @@ public class WeatherFragment extends Fragment {
                                 }
                             }
 
-                            cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=da65fafb6cb9242168b7724fb5ab75e7");
+                            cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=4f038c09700b461d5b938b10f273577a");
                         }
                         else
                         {
@@ -323,7 +323,7 @@ public class WeatherFragment extends Fragment {
                     }
                 }
 
-                cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=da65fafb6cb9242168b7724fb5ab75e7");
+                cityForcastUrl = new URL("http://api.openweathermap.org/data/2.5/group?id=" + selectedCityIDs + "&units=imperial&APPID=4f038c09700b461d5b938b10f273577a");
             }
             else
             {
@@ -452,6 +452,8 @@ public class WeatherFragment extends Fragment {
                 mCityWeatherList.addAll(result);
                 mWeatherAdapter.notifyDataSetChanged();
 
+                //Had to set onScrollListener here per setting it in onViewCreated, before all the view
+                //was done being initialized, was causing onScroll to automatical be called.
                 lv_city_weather.setOnScrollListener(new AbsListView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(AbsListView view, int scrollState) {
