@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.activities;
+package com.birddevstudios.thefastforecast.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.utilities.FontCache;
+import com.birddevstudios.thefastforecast.R;
+import com.birddevstudios.thefastforecast.utilities.FontCache;
 
 public class SplashActivity extends AppCompatActivity {
 

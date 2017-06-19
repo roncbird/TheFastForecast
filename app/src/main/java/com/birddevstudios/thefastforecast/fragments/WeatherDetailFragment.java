@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.fragments;
+package com.birddevstudios.thefastforecast.fragments;
 
 
 import android.graphics.Bitmap;
@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.activities.MainActivity;
-import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.utilities.Methods;
+import com.birddevstudios.thefastforecast.activities.MainActivity;
+import com.birddevstudios.thefastforecast.R;
+import com.birddevstudios.thefastforecast.utilities.Methods;
 
 import java.util.HashMap;
 

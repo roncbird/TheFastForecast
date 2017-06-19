@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast;
+package com.birddevstudios.thefastforecast;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.mycompany.thefastforecast", appContext.getPackageName());
+        assertEquals("com.birddevstudios.thefastforecast", appContext.getPackageName());
     }
 }

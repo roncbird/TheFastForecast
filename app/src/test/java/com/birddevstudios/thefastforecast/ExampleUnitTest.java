@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast;
+package com.birddevstudios.thefastforecast;
 
 import org.junit.Test;
 

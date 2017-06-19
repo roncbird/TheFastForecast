@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.adapters;
+package com.birddevstudios.thefastforecast.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,10 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.fragments.Constants;
-import com.mycompany.thefastforecast.utilities.FontCache;
-import com.mycompany.thefastforecast.utilities.Methods;
+import com.birddevstudios.thefastforecast.R;
+import com.birddevstudios.thefastforecast.utilities.Constants;
+import com.birddevstudios.thefastforecast.utilities.FontCache;
+import com.birddevstudios.thefastforecast.utilities.Methods;
 
 import org.json.JSONArray;
 import org.json.JSONException;

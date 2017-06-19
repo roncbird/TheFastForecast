@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mycompany.thefastforecast.fragments.WeatherDetailFragment">
+    tools:context="com.birddevstudios.thefastforecast.fragments.WeatherDetailFragment">
 
     <LinearLayout
         android:id="@+id/ll_back"

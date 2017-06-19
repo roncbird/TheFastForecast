@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.fragments;
+package com.birddevstudios.thefastforecast.fragments;
 
 
 import android.app.AlertDialog;
@@ -23,9 +23,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.adapters.WeatherAdapter;
-import com.mycompany.thefastforecast.utilities.Methods;
+import com.birddevstudios.thefastforecast.R;
+import com.birddevstudios.thefastforecast.adapters.WeatherAdapter;
+import com.birddevstudios.thefastforecast.utilities.Methods;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,8 +42,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.mycompany.thefastforecast.fragments.Constants.SharedPrefrenceKeys.APP_LOADED_FOR_FIRST_TIME_KEY;
-import static com.mycompany.thefastforecast.fragments.Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY;
+import static com.birddevstudios.thefastforecast.utilities.Constants.SharedPrefrenceKeys.APP_LOADED_FOR_FIRST_TIME_KEY;
+import static com.birddevstudios.thefastforecast.utilities.Constants.SharedPrefrenceKeys.SELECTED_CITY_IDS_JSON_STRING_KEY;
 
 
 /**

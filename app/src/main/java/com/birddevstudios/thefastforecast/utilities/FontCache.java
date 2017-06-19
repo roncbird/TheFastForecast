@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.utilities;
+package com.birddevstudios.thefastforecast.utilities;
 
 import android.content.Context;
 import android.graphics.Typeface;

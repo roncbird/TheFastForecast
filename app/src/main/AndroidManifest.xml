@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mycompany.thefastforecast">
+    package="com.birddevstudios.thefastforecast">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.mycompany.thefastforecast.activities.MainActivity"
+            android:name="com.birddevstudios.thefastforecast.activities.MainActivity"
             android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name="com.mycompany.thefastforecast.activities.SplashActivity"
+        <activity android:name="com.birddevstudios.thefastforecast.activities.SplashActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>

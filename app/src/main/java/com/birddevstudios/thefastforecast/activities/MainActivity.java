@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.activities;
+package com.birddevstudios.thefastforecast.activities;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -11,11 +11,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.fragments.CitySelectionFragment;
-import com.mycompany.thefastforecast.fragments.WeatherDetailFragment;
-import com.mycompany.thefastforecast.fragments.WeatherFragment;
-import com.mycompany.thefastforecast.utilities.Methods;
+import com.birddevstudios.thefastforecast.R;
+import com.birddevstudios.thefastforecast.fragments.CitySelectionFragment;
+import com.birddevstudios.thefastforecast.fragments.WeatherDetailFragment;
+import com.birddevstudios.thefastforecast.fragments.WeatherFragment;
+import com.birddevstudios.thefastforecast.utilities.Methods;
 
 import java.util.ArrayList;
 import java.util.HashMap;

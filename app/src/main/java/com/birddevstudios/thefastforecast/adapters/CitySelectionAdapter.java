@@ -1,4 +1,4 @@
-package com.mycompany.thefastforecast.adapters;
+package com.birddevstudios.thefastforecast.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -12,8 +12,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.mycompany.thefastforecast.R;
-import com.mycompany.thefastforecast.utilities.FontCache;
+import com.birddevstudios.thefastforecast.R;
+import com.birddevstudios.thefastforecast.utilities.FontCache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
